@@ -16,6 +16,7 @@ from homeassistant.exceptions import HomeAssistantError
 
 from .const import (
     CONF_MODBUS_ADDRESS,
+    DEFAULT_HOST,
     DEFAULT_MODBUS_ADDRESS,
     DEFAULT_NAME,
     DEFAULT_PORT,
@@ -30,7 +31,7 @@ _LOGGER = logging.getLogger(__name__)
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
         vol.Optional(CONF_NAME, default=DEFAULT_NAME): str,
-        vol.Required(CONF_HOST): str,
+        vol.Required(CONF_HOST, default=DEFAULT_HOST): str,
         vol.Required(CONF_PORT, default=DEFAULT_PORT): int,
         vol.Required(CONF_MODBUS_ADDRESS, default=DEFAULT_MODBUS_ADDRESS): int,
         vol.Required(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): int,
