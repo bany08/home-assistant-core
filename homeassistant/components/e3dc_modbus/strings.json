@@ -22,5 +22,27 @@
     "abort": {
       "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
     }
+  },
+  "entity": {
+    "sensor": {
+      "manufacturer": {
+        "name": "Manufacturer"
+      },
+      "serialnumber": {
+        "name": "Serial"
+      },
+      "firmware": {
+        "name": "Firmware"
+      },
+      "modbusfirmware": {
+        "name": "Modbus Firmware"
+      },
+      "registercount": {
+        "name": "Register Count"
+      },
+      "model": {
+        "name": "Model"
+      }
+    }
   }
 }

@@ -23,7 +23,7 @@ async def async_setup_entry(
 ) -> None:
     """Set up the sensor platform."""
     hub_name = hass.data[DOMAIN][entry.entry_id]["hub"].name
-    _LOGGER.debug("Platformname: %s", hass.data[DOMAIN])
+    # _LOGGER.debug("Platformname: %s", hass.data[DOMAIN])
     # hub = hass.data[DOMAIN][hub_name]["hub"]
     hub = hass.data[DOMAIN][entry.entry_id]["hub"]  # Object of class E3DCModbusHub
 
@@ -39,7 +39,6 @@ async def async_setup_entry(
             sensor_info[2],
             sensor_info[3],
         )
-        _LOGGER.debug("Adding sensor with unique ID: %s", sensor.unique_id)
         entities.append(sensor)
 
     async_add_entities(entities, update_before_add=True)
@@ -50,6 +49,8 @@ class E3DCSensor(SensorEntity):
 
     Sensor: [Name, Key, TranslationKey, Register, Datatype, Count, Unit, Icon]
     """
+
+    _attr_has_entity_name = True
 
     # def __init__(self, platform_name, hub, device_info, name, key, unit, icon, register, datatype, count, Scaninterval):
     # def __init__(self, platform_name, hub, device_info, name, key, unit, icon, test=""):
@@ -66,6 +67,9 @@ class E3DCSensor(SensorEntity):
         self._unit_of_measurement = unit
         self._icon = icon
         self._state = None
+        self._attr_name = key
+        self._attr_unique_id = f"{DOMAIN}_{self._key}"
+        self.translation_key = key
         # self._device_info = device_info
         # self._attr_state_class = STATE_CLASS_MEASUREMENT
         # if self._unit_of_measurement == UnitOfEnergy.KILO_WATT_HOUR:
@@ -90,6 +94,7 @@ class E3DCSensor(SensorEntity):
     def _modbus_data_updated(self):
         self._update_state()
         self.async_write_ha_state()
+        # _LOGGER.debug("Entity %s updated", self.entity_id)
 
     @callback
     def _update_state(self):

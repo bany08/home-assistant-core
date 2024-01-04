@@ -22,5 +22,27 @@
                 }
             }
         }
+    },
+    "entity": {
+        "sensor": {
+            "firmware": {
+                "name": "Firmware"
+            },
+            "manufacturer": {
+                "name": "Manufacturer"
+            },
+            "modbusfirmware": {
+                "name": "Modbus Firmware"
+            },
+            "model": {
+                "name": "Model"
+            },
+            "registercount": {
+                "name": "Register Count"
+            },
+            "serialnumber": {
+                "name": "Serial"
+            }
+        }
     }
 }

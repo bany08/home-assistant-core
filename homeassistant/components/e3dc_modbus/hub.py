@@ -53,7 +53,7 @@ class E3DCModbusHub:
         self._sensors = []
         self.data = {}
 
-        self._manufacturer = "E3/DC Hager AG"
+        self._manufacturer = "HagerEnergy GmbH"
         self._model = "S10 E AIO Pro 912"
         self._sw_version = "0.1.0"
 
@@ -145,14 +145,15 @@ class E3DCModbusHub:
 
     @property
     def device_info(self) -> DeviceInfo:
-        """Return default device info."""
+        """Return information about the device."""
         # _LOGGER.debug("Geräte UID: %s %s", DOMAIN, self.unique_id)
+        # _LOGGER.debug("Data: %s", self.data.get("manufacturer"))
         return {
             "identifiers": {(DOMAIN, self._name)},
             "manufacturer": self._manufacturer,
-            "model": self._model,
+            "model": self.data.get("model"),
             "name": self._name,
-            "sw_version": self._sw_version,
+            "sw_version": self.data.get("firmware"),
             "configuration_url": "https://s10.e3dc.com/",
         }
 
@@ -203,13 +204,13 @@ class E3DCModbusHub:
 
     def read_modbus_data_identificationblock(self):
         """Read the identification block from the E3DC Modbus."""
-        response = self.read_holding_registers(
-            unit=self._address, address=40001, count=1
-        )
-        _LOGGER.debug(
-            "ModbusResponse: %s",
-            BinaryPayloadDecoder.fromRegisters(response.registers, byteorder=">"),
-        )
+        # response = self.read_holding_registers(
+        #     unit=self._address, address=40001, count=1
+        # )
+        # _LOGGER.debug(
+        #     "ModbusResponse: %s",
+        #     BinaryPayloadDecoder.fromRegisters(response.registers, byteorder=">"),
+        # )
 
         def decode_string(decoder):
             s = decoder.decode_string(32)  # get 32 char string
@@ -228,7 +229,7 @@ class E3DCModbusHub:
             modbusfirmware_data.registers, byteorder=">"
         )
         self.data["modbusfirmware"] = decoder.decode_16bit_uint()
-        _LOGGER.debug("Modbus Firmware: %s", self.data["modbusfirmware"])
+        # _LOGGER.debug("Modbus Firmware: %s", self.data["modbusfirmware"])
 
         registercount_data = self.read_holding_registers(
             unit=self._address, address=40002, count=1
@@ -284,7 +285,7 @@ class E3DCModbusHub:
             firmware_data.registers, byteorder=">"
         )
         self.data["firmware"] = decode_string(decoder)
-        _LOGGER.debug("Self Data: %s", self.data)
+        _LOGGER.debug("Data: %s", self.data)
 
         return True
 
