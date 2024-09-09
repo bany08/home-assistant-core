@@ -1,11 +1,16 @@
 """Tests for AVM Fritz!Box sensor component."""
+
 from datetime import timedelta
 from unittest.mock import Mock
 
 from requests.exceptions import HTTPError
 
 from homeassistant.components.fritzbox.const import DOMAIN as FB_DOMAIN
-from homeassistant.components.sensor import ATTR_STATE_CLASS, DOMAIN, SensorStateClass
+from homeassistant.components.sensor import (
+    ATTR_STATE_CLASS,
+    DOMAIN as SENSOR_DOMAIN,
+    SensorStateClass,
+)
 from homeassistant.const import (
     ATTR_FRIENDLY_NAME,
     ATTR_UNIT_OF_MEASUREMENT,
@@ -23,7 +28,7 @@ from .const import CONF_FAKE_NAME, MOCK_CONFIG
 
 from tests.common import async_fire_time_changed
 
-ENTITY_ID = f"{DOMAIN}.{CONF_FAKE_NAME}"
+ENTITY_ID = f"{SENSOR_DOMAIN}.{CONF_FAKE_NAME}"
 
 
 async def test_setup(
@@ -86,7 +91,7 @@ async def test_update(hass: HomeAssistant, fritz: Mock) -> None:
 
     next_update = dt_util.utcnow() + timedelta(seconds=200)
     async_fire_time_changed(hass, next_update)
-    await hass.async_block_till_done()
+    await hass.async_block_till_done(wait_background_tasks=True)
 
     assert fritz().update_devices.call_count == 2
     assert fritz().login.call_count == 1
@@ -104,7 +109,7 @@ async def test_update_error(hass: HomeAssistant, fritz: Mock) -> None:
 
     next_update = dt_util.utcnow() + timedelta(seconds=200)
     async_fire_time_changed(hass, next_update)
-    await hass.async_block_till_done()
+    await hass.async_block_till_done(wait_background_tasks=True)
 
     assert fritz().update_devices.call_count == 4
     assert fritz().login.call_count == 4
@@ -127,7 +132,7 @@ async def test_discover_new_device(hass: HomeAssistant, fritz: Mock) -> None:
 
     next_update = dt_util.utcnow() + timedelta(seconds=200)
     async_fire_time_changed(hass, next_update)
-    await hass.async_block_till_done()
+    await hass.async_block_till_done(wait_background_tasks=True)
 
-    state = hass.states.get(f"{DOMAIN}.new_device_temperature")
+    state = hass.states.get(f"{SENSOR_DOMAIN}.new_device_temperature")
     assert state

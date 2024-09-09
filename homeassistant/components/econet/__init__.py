@@ -1,4 +1,5 @@
 """Support for EcoNet products."""
+
 import asyncio
 from datetime import timedelta
 import logging
@@ -30,6 +31,7 @@ PLATFORMS = [
     Platform.BINARY_SENSOR,
     Platform.CLIMATE,
     Platform.SENSOR,
+    Platform.SWITCH,
     Platform.WATER_HEATER,
 ]
 PUSH_UPDATE = "econet.push_update"
